@@ -82,15 +82,16 @@ def pizzas():
 def restaurantpizzas():
 
     try:
-        new_restaurant_pizza = RestaurantPizza(
+        new_restaurant_pizza = RestaurantPizza (
             price =request.get_json()['price'],
             pizza_id = request.get_json()['pizza_id'],
             restaurant_id = request.get_json()['restaurant_id']
         )
+
         db.session.add(new_restaurant_pizza)
         db.session.commit()
 
-        pizza = Pizza.query.filter(Pizza.id == new_restaurant_pizza.pizza_id).first()
+        pizza = Pizza.query.filter_by(Pizza.id == new_restaurant_pizza.pizza_id).first()
         pizza_dict = pizza.to_dict()
 
         response = make_response(
@@ -100,7 +101,8 @@ def restaurantpizzas():
 
     except ValueError:
         response = make_response(
-            {"errors":"validation errors"}
+            {"errors":"validation errors"},
+            400
         )
     return response
 
